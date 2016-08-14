@@ -23,11 +23,11 @@
             <SortedDescendingCellStyle BackColor="#D4DFE1" />  
             <SortedDescendingHeaderStyle BackColor="#15524A" />  
             <Columns>  
-                <asp:BoundField DataField="id" HeaderText="id" />  
+                <asp:BoundField DataField="OrderID" HeaderText="OrderID" />  
+                <asp:BoundField DataField="OrderDate" HeaderText="OrderDate" /> 
                 <asp:BoundField DataField="Name" HeaderText="Name" />  
-                <asp:BoundField DataField="City" HeaderText="City" />  
-                <asp:BoundField DataField="Address" HeaderText="Address" />  
-                <asp:BoundField DataField="Designation" HeaderText="Designation" />  
+                <asp:BoundField DataField="UnitsOnOrder" HeaderText="UnitsOnOrder" />
+                <asp:BoundField DataField="UnitPrice" HeaderText="UnitPrice" />  
             </Columns>  
         </asp:GridView>  
         <br />  

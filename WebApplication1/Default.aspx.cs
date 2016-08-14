@@ -36,11 +36,22 @@ namespace WebApplication1
         private void Bindgrid()
         {
             connection();
-            query = "select *from Employee";//not recommended this i have written just for example,write stored procedure for security  
+            query = @"select 
+                            OrderDetail.OrderID,""Order"".OrderDate, Product.Name, Product.UnitsOnOrder, Product.UnitPrice
+                    from 
+                            OrderDetail, Product, ""Order"" 
+                    where 
+                        (
+                        OrderDetail.ProductID=Product.ID 
+                        and OrderDetail.OrderID=""Order"".ID
+                        and Product.UnitsOnOrder>0
+                        )"
+                                                                                    ;//not recommended this i have written just for example,write stored procedure for security  
             com = new SqlCommand(query, con);
             SqlDataAdapter da = new SqlDataAdapter(query, con);
             DataSet ds = new DataSet();
             da.Fill(ds);
+            
             GridView1.DataSource = ds;
             GridView1.DataBind();
             con.Close();
@@ -54,7 +65,7 @@ namespace WebApplication1
             //Clears all content output from the buffer stream.  
             Response.ClearContent();
             //Adds HTTP header to the output stream  
-            Response.AddHeader("content-disposition", string.Format("attachment; filename=C#cornerVithalWadje.xls"));
+            Response.AddHeader("content-disposition", string.Format("attachment; filename=SalesReport.xls"));
 
             // Gets or sets the HTTP MIME type of the output stream  
             Response.ContentType = "application/vnd.ms-excel";
