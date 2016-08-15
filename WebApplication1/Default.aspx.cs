@@ -8,6 +8,8 @@ using System.Data;
 using System.IO;
 using System.Configuration;
 using System.Data.SqlClient;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml;
 
 namespace WebApplication1
 {
@@ -18,7 +20,7 @@ namespace WebApplication1
         private string constr, query;
         private void connection()
         {
-            constr = ConfigurationManager.ConnectionStrings["getconn"].ToString();
+            constr = ConfigurationManager.ConnectionStrings["Northwind"].ToString();
             con = new SqlConnection(constr);
             con.Open();
 
@@ -37,16 +39,15 @@ namespace WebApplication1
         {
             connection();
             query = @"select 
-                            OrderDetail.OrderID,""Order"".OrderDate, Product.Name, Product.UnitsOnOrder, Product.UnitPrice
+                            OrderDetail.OrderID,""Order"".OrderDate, Product.Name, OrderDetail.Quantity, OrderDetail.UnitPrice
                     from 
                             OrderDetail, Product, ""Order"" 
                     where 
                         (
                         OrderDetail.ProductID=Product.ID 
                         and OrderDetail.OrderID=""Order"".ID
-                        and Product.UnitsOnOrder>0
                         )"
-                                                                                    ;//not recommended this i have written just for example,write stored procedure for security  
+                                                                                    ;
             com = new SqlCommand(query, con);
             SqlDataAdapter da = new SqlDataAdapter(query, con);
             DataSet ds = new DataSet();
@@ -58,43 +59,25 @@ namespace WebApplication1
             ViewState["DataTable"] = ds.Tables[0];
         }
 
-
         public void CreateExcelFile(DataTable Excel)
         {
+            XLWorkbook wb = new XLWorkbook();
+            var ws = wb.Worksheets.Add(Excel, "WorksheetName");
+            
+            HttpResponse httpResponse = Response;
+            httpResponse.Clear();
+            httpResponse.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            httpResponse.AddHeader("content-disposition", "attachment;filename=\"SalesReport.xlsx\"");
 
-            //Clears all content output from the buffer stream.  
-            Response.ClearContent();
-            //Adds HTTP header to the output stream  
-            Response.AddHeader("content-disposition", string.Format("attachment; filename=SalesReport.xls"));
-
-            // Gets or sets the HTTP MIME type of the output stream  
-            Response.ContentType = "application/vnd.ms-excel";
-            string space = "";
-
-            foreach (DataColumn dcolumn in Excel.Columns)
+            // Flush the workbook to the Response.OutputStream
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-
-                Response.Write(space + dcolumn.ColumnName);
-                space = "\t";
+                wb.SaveAs(memoryStream);
+                memoryStream.WriteTo(httpResponse.OutputStream);
+                memoryStream.Close();
             }
-            Response.Write("\n");
-            int countcolumn;
-            foreach (DataRow dr in Excel.Rows)
-            {
-                space = "";
-                for (countcolumn = 0; countcolumn < Excel.Columns.Count; countcolumn++)
-                {
 
-                    Response.Write(space + dr[countcolumn].ToString());
-                    space = "\t";
-
-                }
-
-                Response.Write("\n");
-
-
-            }
-            Response.End();
+            httpResponse.End();
         }
 
 
@@ -102,7 +85,12 @@ namespace WebApplication1
         {
             //getting datatable from viewstate  
             DataTable dt = (DataTable)ViewState["DataTable"];
-
+            //adding new column which calculates total amount of money that is paid for an order
+            DataColumn TotalAmount = new DataColumn();
+            TotalAmount.DataType = System.Type.GetType("System.Decimal");
+            TotalAmount.ColumnName = "TotalAmount";
+            TotalAmount.Expression = "UnitPrice * Quantity";
+            dt.Columns.Add(TotalAmount);
             //calling create Excel File Method and ing dataTable   
             CreateExcelFile(dt);
         }

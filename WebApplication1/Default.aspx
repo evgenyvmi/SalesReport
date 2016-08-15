@@ -8,7 +8,9 @@
 </head>  
 <body bgcolor="Silver">  
     <form id="form1" runat="server">  
-    <div>  
+    <div style="height: 263px">  
+                   <asp:Button ID="Button1" runat="server"  
+            Text="Create Sales Report File" onclick="Button1_Click"/>  
         <asp:GridView ID="GridView1" AutoGenerateColumns="false" runat="server" CellPadding="6"  
             ForeColor="#333333" GridLines="None">  
             <AlternatingRowStyle BackColor="White" />  
@@ -23,16 +25,14 @@
             <SortedDescendingCellStyle BackColor="#D4DFE1" />  
             <SortedDescendingHeaderStyle BackColor="#15524A" />  
             <Columns>  
-                <asp:BoundField DataField="OrderID" HeaderText="OrderID" />  
-                <asp:BoundField DataField="OrderDate" HeaderText="OrderDate" /> 
+                <asp:BoundField DataField="OrderID" HeaderText="Order ID" />  
+                <asp:BoundField DataField="OrderDate" HeaderText="Order Date" /> 
                 <asp:BoundField DataField="Name" HeaderText="Name" />  
-                <asp:BoundField DataField="UnitsOnOrder" HeaderText="UnitsOnOrder" />
-                <asp:BoundField DataField="UnitPrice" HeaderText="UnitPrice" />  
+                <asp:BoundField DataField="Quantity" HeaderText="Quantity" />
+                <asp:BoundField DataField="UnitPrice" HeaderText="Unit Price" /> 
             </Columns>  
         </asp:GridView>  
         <br />  
-                   <asp:Button ID="Button1" runat="server"  
-            Text="Create Sales Report File" onclick="Button1_Click"/>  
     </div>  
     </form>  
 </body>  

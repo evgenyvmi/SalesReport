@@ -43,6 +43,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClosedXML">
+      <HintPath>..\..\..\..\..\Desktop\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\..\..\..\..\Downloads\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelLibrary">
       <HintPath>..\..\..\..\..\Desktop\ExcelLibrary.dll</HintPath>
     </Reference>
