@@ -10,7 +10,7 @@
     <form id="form1" runat="server">  
     <div style="height: 263px">  
                    <asp:Button ID="Button1" runat="server"  
-            Text="Create Sales Report File" onclick="Button1_Click"/>  
+            Text="Create Sales Report File and send via email" onclick="Button1_Click"/>  
         <asp:GridView ID="GridView1" AutoGenerateColumns="false" runat="server" CellPadding="6"  
             ForeColor="#333333" GridLines="None">  
             <AlternatingRowStyle BackColor="White" />  

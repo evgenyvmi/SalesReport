@@ -8,8 +8,11 @@ using System.Data;
 using System.IO;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Net.Mail;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml;
+using System.Text;
+using System.Net;
 
 namespace WebApplication1
 {
@@ -74,9 +77,25 @@ namespace WebApplication1
             {
                 wb.SaveAs(memoryStream);
                 memoryStream.WriteTo(httpResponse.OutputStream);
+                byte[] bytes = memoryStream.ToArray();
                 memoryStream.Close();
+                MailMessage mm = new MailMessage("anruevinswork@gmail.com", "anruevinsnew@gmail.com");
+                mm.Subject = "Sales Report";
+                mm.Body = "HI";
+                mm.Attachments.Add(new Attachment(new MemoryStream(bytes), "SalesReport.xlsx"));
+                mm.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.gmail.com";
+                smtp.EnableSsl = true;
+                smtp.UseDefaultCredentials = false;
+                NetworkCredential NetworkCred = new NetworkCredential();
+                NetworkCred.UserName = "anruevinswork@gmail.com";
+                NetworkCred.Password = "ZZHFZ3lZhDb3bioCiqXA";
+                
+                smtp.Credentials = NetworkCred;
+                smtp.Port = 587;
+                smtp.Send(mm);
             }
-
             httpResponse.End();
         }
 
