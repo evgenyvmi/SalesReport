@@ -5,6 +5,12 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{14B26D5A-F0F9-4AD7-86E9-C4EED6DAD1C3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1BE71F66-CDEC-4229-B9AE-C28EF684EFDC}"
+	ProjectSection(SolutionItems) = preProject
+		WebApplication1\ClosedXML.dll = WebApplication1\ClosedXML.dll
+		..\..\..\..\Downloads\DocumentFormat.OpenXml.dll = ..\..\..\..\Downloads\DocumentFormat.OpenXml.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
