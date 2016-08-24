@@ -77,9 +77,6 @@
     <Content Include="ClosedXML.dll" />
     <Content Include="DocumentFormat.OpenXml.dll" />
     <Content Include="packages.config" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
