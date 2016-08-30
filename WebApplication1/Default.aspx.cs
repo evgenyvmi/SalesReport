@@ -55,7 +55,7 @@ namespace WebApplication1
             SqlDataAdapter da = new SqlDataAdapter(query, con);
             DataSet ds = new DataSet();
             da.Fill(ds);
-            
+
             GridView1.DataSource = ds;
             GridView1.DataBind();
             con.Close();
@@ -64,9 +64,17 @@ namespace WebApplication1
 
         public void CreateExcelFile(DataTable Excel)
         {
+            int totalRows = Excel.Rows.Count;
+            int currentRow = 2;
             XLWorkbook wb = new XLWorkbook();
             var ws = wb.Worksheets.Add(Excel, "WorksheetName");
-            
+            for (int i = 0; i < totalRows; i++)
+            {
+                string currentCell = "F" + currentRow;
+                string Formula = "=D" + currentRow + "*" + "E" + currentRow;
+                ws.Cells(currentCell).FormulaA1 = Formula;
+                currentRow++;
+            }
             HttpResponse httpResponse = Response;
             httpResponse.Clear();
             httpResponse.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -91,7 +99,7 @@ namespace WebApplication1
                 NetworkCredential NetworkCred = new NetworkCredential();
                 NetworkCred.UserName = "anruevinswork@gmail.com";
                 NetworkCred.Password = "ZZHFZ3lZhDb3bioCiqXA";
-                
+
                 smtp.Credentials = NetworkCred;
                 smtp.Port = 587;
                 smtp.Send(mm);
@@ -102,16 +110,31 @@ namespace WebApplication1
 
         protected void Button1_Click(object sender, EventArgs e)
         {
+            DateTime datefrom = DateTime.Parse(Request.Form[TextBox1.UniqueID]);
+            DateTime dateto = DateTime.Parse(Request.Form[TextBox2.UniqueID]);
             //getting datatable from viewstate  
             DataTable dt = (DataTable)ViewState["DataTable"];
+            string filterExp = "OrderDate  > '" + datefrom.Date + "' and OrderDate < '" + dateto.Date + "'";
+            DataRow[] foundrows;
+            foundrows = dt.Select(filterExp);
+            DataTable newdt = new DataTable();
+            newdt.Columns.Add("OrderID", typeof(Int32));
+            newdt.Columns.Add("OrderDate", typeof(DateTime));
+            newdt.Columns.Add("Name", typeof(string));
+            newdt.Columns.Add("Quantity", typeof(Int32));
+            newdt.Columns.Add("UnitPrice", typeof(decimal));
+            foreach (DataRow row in foundrows)
+            {
+                newdt.ImportRow(row);
+            }
             //adding new column which calculates total amount of money that is paid for an order
             DataColumn TotalAmount = new DataColumn();
             TotalAmount.DataType = System.Type.GetType("System.Decimal");
             TotalAmount.ColumnName = "TotalAmount";
-            TotalAmount.Expression = "UnitPrice * Quantity";
-            dt.Columns.Add(TotalAmount);
+            //TotalAmount.Expression = "UnitPrice * Quantity";
+            newdt.Columns.Add(TotalAmount);
             //calling create Excel File Method and ing dataTable   
-            CreateExcelFile(dt);
+            CreateExcelFile(newdt);
         }
     }
 }

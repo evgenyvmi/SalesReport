@@ -8,9 +8,13 @@
 </head>  
 <body bgcolor="Silver">  
     <form id="form1" runat="server">  
-    <div style="height: 263px">  
-                   <asp:Button ID="Button1" runat="server"  
-            Text="Create Sales Report File and send via email" onclick="Button1_Click"/>  
+    <div style="height: 263px">
+        <h3>Choose the time period to create report from</h3>
+        <p>from</p>  
+        <asp:TextBox ID="TextBox1" runat="server" Columns="2" TextMode="Date" Rows="2"/>
+        <p>to</p>  
+        <asp:TextBox ID="TextBox2" runat="server" Columns="2" TextMode="Date" Rows="2"/>
+        <asp:Button ID="Button1" runat="server"  Text="Choose range and create file" OnClick="Button1_Click"/>  
         <asp:GridView ID="GridView1" AutoGenerateColumns="false" runat="server" CellPadding="6"  
             ForeColor="#333333" GridLines="None">  
             <AlternatingRowStyle BackColor="White" />  
